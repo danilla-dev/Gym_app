@@ -1,0 +1,48 @@
+.register-form-container {
+	.register-form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 2em;
+		border: 3px solid rgb(228, 226, 226);
+		border-radius: 20px;
+		background-color: #858383;
+
+		input {
+			margin: 0.5em 0;
+			padding: 0.75em;
+			width: 85%;
+			font-size: 1.6rem;
+			border: 1px solid black;
+			border-radius: 10px;
+		}
+		label {
+			font-size: 2.2rem;
+		}
+		button {
+			margin-top: 0.5em;
+			padding: 0.5em 1em;
+			width: 60%;
+			border-radius: 20px;
+			border: 1px solid black;
+			font-size: 2rem;
+			text-transform: uppercase;
+		}
+		p {
+			margin: 0.5em 0 0em 0;
+			font-size: 1.6rem;
+			font-weight: bold;
+			color: #ffd700;
+		}
+		.buttons {
+			width: 100%;
+			margin-top: 3em;
+			padding-top: 1em;
+			border-top: 1px solid black;
+		}
+		&__register-btn {
+			margin-top: 0.2em;
+		}
+	}
+}
