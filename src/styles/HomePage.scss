@@ -1,0 +1,37 @@
+@import 'colors';
+.home-page {
+	padding-top: 80px;
+	width: 100vw;
+	min-height: 100vh;
+	background-color: $DarkBlue;
+	h2 {
+		margin: 0.25em 0;
+		color: $Gold;
+		font-size: 3rem;
+	}
+  a{
+    text-decoration: none;
+  }
+	&__trainings,
+	&__max {
+		padding: 2em 1em;
+		button {
+			width: 100%;
+			padding: 1em 0.5em;
+			margin: 0.5em 0;
+			border: transparent;
+			border-radius: 10px;
+			background-color: $Gold;
+			color: $Silver;
+			font-weight: bold;
+			font-size: 1.6rem;
+			text-transform: uppercase;
+			cursor: pointer;
+		}
+	}
+	.title {
+		margin: 0.75em 0;
+		font-size: 2rem;
+		color: $Silver;
+	}
+}

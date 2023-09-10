@@ -1,3 +1,4 @@
+@import 'colors';
 .register-form-container {
 	.register-form {
 		display: flex;
@@ -7,7 +8,7 @@
 		padding: 2em;
 		border: 3px solid rgb(228, 226, 226);
 		border-radius: 20px;
-		background-color: #858383;
+		background-color: $Silver;
 
 		input {
 			margin: 0.5em 0;
@@ -28,12 +29,12 @@
 			border: 1px solid black;
 			font-size: 2rem;
 			text-transform: uppercase;
+			background-color: $White;
 		}
-		p {
+		&__login-text {
 			margin: 0.5em 0 0em 0;
 			font-size: 1.6rem;
 			font-weight: bold;
-			color: #ffd700;
 		}
 		.buttons {
 			width: 100%;
@@ -43,6 +44,15 @@
 		}
 		&__register-btn {
 			margin-top: 0.2em;
+			background-color: $White;
+			&:disabled {
+				background-color: gray;
+			}
+		}
+		.error {
+			margin: 0;
+			font-size: 1.6rem;
+			color: tomato;
 		}
 	}
 }

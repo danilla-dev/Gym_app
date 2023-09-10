@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
-import { getAuth } from 'firebase/auth'
+import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth'
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyC6Bps5__TJh1Dx1yHsOtMTg-6dPWlpWr4',
@@ -16,3 +16,10 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 const analytics = getAnalytics(app)
+setPersistence(auth, browserSessionPersistence)
+	.then(() => {
+		console.log('Zachowanie sesji ustawione na pamięć przeglądarki.')
+	})
+	.catch(error => {
+		console.error('Błąd ustawiania zachowania sesji:', error)
+	})

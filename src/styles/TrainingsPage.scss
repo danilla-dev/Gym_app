@@ -1,0 +1,58 @@
+@import 'colors';
+.trainings-page {
+	padding: 80px 1em 1em 1em;
+	min-height: 100vh;
+	max-width: 100vw;
+	background-color: $DarkBlue;
+	color: white;
+	&__session {
+		display: flex;
+		flex-direction: column;
+		padding: 0.5em;
+		margin-top: 0.5em;
+		border: 1px solid $Silver;
+		border-radius: 10px;
+		background-color: $Silver;
+		color: $DarkBlue;
+		.exercise {
+			display: flex;
+			justify-content: space-between;
+			margin: 0.5em 0;
+			border: 1px solid $DarkBlue;
+			border-radius: 10px;
+			font-size: 1.4rem;
+			background-color: $DarkBlue;
+			color: $Silver;
+			.series {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: space-between;
+				flex: 1;
+				padding: 0 0.5em;
+				border-left: 1px solid $Silver;
+				p {
+					padding: 0;
+				}
+			}
+
+			p {
+				flex: 1;
+				padding: 0.5em;
+				text-align: center;
+			}
+			&-container {
+				transition: height 0.4s;
+			}
+		}
+		.date {
+			font-size: 2.2rem;
+			font-weight: bold;
+		}
+	}
+	&__training-name {
+		margin: 0.75em 0;
+		font-size: 3rem;
+		color: $Gold;
+	}
+}

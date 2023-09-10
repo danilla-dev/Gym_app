@@ -1,0 +1,27 @@
+@import 'colors';
+.aside-menu {
+	position: absolute;
+	width: 80%;
+	height: 100vh;
+	left: 0;
+	top: 0;
+	background-color: $Silver;
+	transition: left 0.3s;
+	&__user {
+		font-size: 3rem;
+		font-weight: bold;
+	}
+	a {
+		text-decoration: none;
+	}
+	&__option {
+		display: flex;
+		align-items: center;
+		justify-content: start;
+		font-size: 2.8rem;
+		color: $Black;
+		svg {
+			margin: 0 0.75em;
+		}
+	}
+}

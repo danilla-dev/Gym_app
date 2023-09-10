@@ -1,0 +1,37 @@
+@import 'colors';
+.home-page-training,
+.home-page-trainings-info,
+.home-page-max,
+.home-page-maxes-info {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	margin: 0.5em 0;
+	border: 1px solid white;
+	border-radius: 10px;
+	overflow: hidden;
+	color: $White;
+	font-size: 1.6rem;
+	p {
+		width: 33%;
+		border-right: 1px solid white;
+		&:last-child {
+			border: none;
+		}
+	}
+}
+.home-page-trainings-info,
+.home-page-maxes-info {
+	background-color: $White;
+	color: $DarkBlue;
+	p {
+		border-color: $DarkBlue;
+	}
+}
+.home-page-training,
+.home-page-max {
+	&:hover {
+		background-color: $Gold;
+		color: $DarkBlue;
+	}
+}

@@ -45,7 +45,7 @@ const LoginForm = () => {
 				<input type='password' onChange={handleOnChange} value={formData.password} name='password' />
 				<div className='buttons'>
 					<button className='login-form__login-btn'>Login</button>
-					<p>Don't have account yet?</p>
+					<p className='login-form__register-text'>Don't have account yet?</p>
 					<Link to='/auth/register'>
 						<button className='login-form__register-btn'>Register</button>
 					</Link>
