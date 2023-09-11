@@ -1,0 +1,52 @@
+@import 'colors';
+.exercise-window {
+	padding: 0.5em;
+	padding-top: 0.25em;
+	margin-bottom: 0.75em;
+	border: 1px solid $Silver;
+	border-radius: 10px;
+	background-color: $Silver;
+	color: $DarkBlue;
+	font-size: 1.4rem;
+	.series-count,
+	.weight,
+	.reps {
+		width: 30%;
+		padding: 0;
+		margin: 0.5em 0;
+	}
+	p {
+		margin: 0.25em 0;
+		padding: 0.5em 0;
+		border-bottom: 1px solid $DarkBlue;
+	}
+	&__series {
+		.series,
+		&-info {
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+		}
+		p {
+			border: none;
+		}
+		.series {
+			border-bottom: 1px solid $DarkBlue;
+			&:last-child {
+				border: none;
+			}
+		}
+	}
+	&__form {
+		form {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: space-evenly;
+			margin: 0.75em 0;
+			input {
+				max-width: 20%;
+			}
+		}
+	}
+}

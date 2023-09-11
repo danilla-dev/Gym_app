@@ -3,6 +3,8 @@ import { auth } from '../firebase/firebaseConfig'
 // Lib
 import { useHistory } from 'react-router-dom'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { getDatabase, ref, child, get } from 'firebase/database'
+import { database } from '../firebase/firebaseConfig'
 // Components
 // Layouts
 // Contexts
@@ -16,21 +18,37 @@ const UserProvider = ({ children }) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const logoutUser = () => {
-		signOut(auth).then(() => setUserID(null))
+		setUserNick()
+		signOut(auth).then(() => setUserID())
+	}
+	const findUsername = id => {
+		const dbRef = ref(getDatabase())
+		get(child(dbRef, `usernames/${id}/nick`))
+			.then(snapshot => {
+				if (snapshot.exists()) {
+					setUserNick(snapshot.val())
+					setIsLoading(false)
+					// history.push('/')
+				} else {
+					console.log('No data available')
+				}
+			})
+			.catch(error => {
+				console.error(error)
+			})
 	}
 	useEffect(() => {
 		onAuthStateChanged(auth, firebaseUser => {
 			if (firebaseUser) {
-				console.log(firebaseUser)
 				setUserID(firebaseUser.uid)
-				setIsLoading(false)
-				history.push('/')
+				findUsername(firebaseUser.uid)
 			} else {
 				setIsLoading(false)
 				history.push('/auth/login')
 			}
 		})
-	}, [])
+	}, [userNick])
+
 	const userContextValue = {
 		userID,
 		userNick,

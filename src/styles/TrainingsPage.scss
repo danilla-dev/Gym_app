@@ -55,4 +55,17 @@
 		font-size: 3rem;
 		color: $Gold;
 	}
+	button {
+		width: 100%;
+		padding: 1em 0.5em;
+		margin: 0.5em 0;
+		border: transparent;
+		border-radius: 10px;
+		background-color: $Gold;
+		color: $Silver;
+		font-weight: bold;
+		font-size: 1.6rem;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
 }

@@ -6,6 +6,7 @@ import { FaDumbbell, FaChartLine } from 'react-icons/fa'
 import { GrPlan, GrLogout } from 'react-icons/gr'
 import { IoMdSettings } from 'react-icons/io'
 import { Link } from 'react-router-dom'
+import { GiStrong } from 'react-icons/gi'
 
 // Components
 
@@ -16,12 +17,15 @@ import { UserContext } from '../contexts/UserContext'
 
 // Styles
 import '../styles/AsideMenu.scss'
+
 const AsideMenu = ({ style }) => {
 	const { userNick, logoutUser } = useContext(UserContext)
-	console.log(userNick)
 	return (
 		<div style={style} className='aside-menu'>
-			<p className='aside-menu__user'>Hello {userNick} </p>
+			{/* <p className='aside-menu__user'>Hello {userNick} </p> */}
+			<h1 className='nav__title'>
+				GymApp <GiStrong />
+			</h1>
 			<Link to='/user/trainings'>
 				<div className='aside-menu__training aside-menu__option'>
 					<GrPlan />

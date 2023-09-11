@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { createUserWithEmailAndPassword, browserSessionPersistence, setPersistence } from 'firebase/auth'
 import { auth } from '../firebase/firebaseConfig'
+import { getDatabase, ref, set } from 'firebase/database'
+import { database } from '../firebase/firebaseConfig'
 
 // Components
 // layouts
@@ -44,12 +46,50 @@ const RegisterForm = () => {
 		}
 	}, [formData])
 
+	const setUsername = (id, username) => {
+		set(ref(database, 'usernames/' + id), {
+			nick: username,
+		})
+	}
+
+	const createHomePageTrainingStructure = id => {
+		set(ref(database, 'trainingsHomePage/' + id), {
+			homePageTrainings: [{ name: '', day: '', lastTraining: '' }],
+		})
+	}
+	const createTrainingStructure = id => {
+		set(ref(database, 'trainings/' + id), {
+			trainings: [
+				{
+					day: '',
+					name: '',
+					sessions: [
+						{
+							exercises: [
+								{
+									name: '',
+									series: [
+										{ weight: 0, reps: 0 },
+										{ weight: 0, reps: 0 },
+										{ weight: 0, reps: 0 },
+										{ weight: 0, reps: 0 },
+									],
+								},
+							],
+						},
+					],
+				},
+			],
+		})
+	}
+
 	const handleSubmit = e => {
 		e.preventDefault()
 		const { email, password, username } = formData
 		createUserWithEmailAndPassword(auth, email, password)
 			.then(userCredential => {
-				setUserNick(username)
+				const { uid } = userCredential.user
+				setUsername(uid, username)
 				history.push('/')
 			})
 			.catch(error => {})
@@ -72,11 +112,11 @@ const RegisterForm = () => {
 			<h2>Register</h2>
 			<form ref={registerForm} onSubmit={handleSubmit} className='register-form'>
 				<label htmlFor='username'>Username:</label>
-				<input type='text' onChange={handleOnChange} value={formData.username} name='username' autocomplete='off' />
+				<input type='text' onChange={handleOnChange} value={formData.username} name='username' />
 				{/* username error */}
 				{(username.length < 6) & (username.length > 0) ? <p className='error'>{usernameErrMess}</p> : null}
 				<label htmlFor='email'>Email:</label>
-				<input type='text' onChange={handleOnChange} value={formData.email} name='email' autocomplete='off' />
+				<input type='text' onChange={handleOnChange} value={formData.email} name='email' />
 				{/* email error */}
 				{!emailRegExp.test(email) & (email !== '') ? <p className='error'>{emailErrMess}</p> : null}
 				<label htmlFor='password'>Password:</label>
