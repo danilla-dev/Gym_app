@@ -22,24 +22,27 @@ const ExerciseSeries = ({ weight, reps, index }) => {
 	)
 }
 const AllSeries = ({ exerciseIndex, series }) => {
+	const seriesForExerciseArray = []
 	return series.map((el, index) => {
 		if (el.exerciseIndex === exerciseIndex) {
+			seriesForExerciseArray.push(el)
+			const count = seriesForExerciseArray.indexOf(el)
 			const { weight, reps } = el
-			return <ExerciseSeries key={index} weight={weight} reps={reps} index={index} />
+			return <ExerciseSeries key={index} weight={weight} reps={reps} index={count} />
 		}
 		return null
 	})
 }
 
 const ExerciseWindow = () => {
-	const { selectedExercises } = useContext(StartTrainingContext)
+	const { selectedExercises, disableButton, setDisableButton } = useContext(StartTrainingContext)
 	const [series, setSeries] = useState([])
-	console.log(series)
+	const [finishSession, setFinishSession] = useState([])
+
 	const [formData, setFormData] = useState({
 		weight: 0,
 		reps: 0,
 	})
-	const [hideWindow, setHideWindow] = useState(false)
 
 	const [openWindows, setOpenWindows] = useState(Array(selectedExercises.length).fill(false))
 
@@ -57,24 +60,25 @@ const ExerciseWindow = () => {
 		const newSeries = series.concat({ exerciseIndex: index, weight: weight, reps: reps })
 		setSeries(newSeries)
 	}
-	const handleToggleWindow = index => {
-		setOpenWindows(prevState => {
-			const newOpenWindows = [...prevState]
-			newOpenWindows[index] = !prevState[index]
-			return newOpenWindows
-		})
+	const handleToggleWindow = e => {
+		const window = e.target.nextElementSibling || e.target.closest('.exercise-data')
+		window.classList.toggle('exercise-data--hide')
+	}
+	const handleFinishExercise = indexOfSession => {
+		setDisableButton(false)
+		const finishedSessions = finishSession.concat({ sessionIndex: indexOfSession })
+		setFinishSession(finishedSessions)
 	}
 
-	const windowHideStyles = { overflow: 'hidden', height: hideWindow ? '0' : 'unset' }
+	const windowHideStyles = { overflow: 'hidden', height: openWindows ? 'unset' : '0' }
 
 	const exercisesWindows = selectedExercises.map((exercise, index) => {
-		console.log(index)
 		return (
-			<div className='exercise-window'>
-				<p onClick={() => handleToggleWindow(index)} className='exercise-window__name'>
+			<div key={index} className='exercise-window'>
+				<p onClick={e => handleToggleWindow(e)} className='exercise-window__name'>
 					{exercise}
 				</p>
-				<div style={windowHideStyles} className='exercise-data'>
+				<div className='exercise-data'>
 					<div className='exercise-window__series'>
 						<div className='exercise-window__series-info'>
 							<p className='series-count'>Count</p>
@@ -84,14 +88,26 @@ const ExerciseWindow = () => {
 						<AllSeries exerciseIndex={index} series={series} />
 					</div>
 					<div className='exercise-window__form'>
-						<form onSubmit={e => handleAddSeries(e, index)}>
-							<label htmlFor='weight'>Weight: </label>
-							<input type='text' name='weight' id='weight' onChange={handleOnChange} />
-							<label htmlFor='reps'>Reps: </label>
-							<input type='text' name='reps' id='reps' onChange={handleOnChange} />
-							<button>Add</button>
-						</form>
-						<button onClick={() => handleToggleWindow(index)}>Save</button>
+						{!finishSession.some(session => session.sessionIndex === index) && (
+							<>
+								<form onSubmit={e => handleAddSeries(e, index)}>
+									<label htmlFor='weight'>Weight: </label>
+									<input type='text' name='weight' id='weight' onChange={handleOnChange} />
+									<label htmlFor='reps'>Reps: </label>
+									<input type='text' name='reps' id='reps' onChange={handleOnChange} />
+									<button>Add</button>
+								</form>
+								<button
+									className='finish-button'
+									onClick={e => {
+										handleToggleWindow(e)
+										handleFinishExercise(index)
+									}}
+								>
+									Finish
+								</button>
+							</>
+						)}
 					</div>
 				</div>
 			</div>

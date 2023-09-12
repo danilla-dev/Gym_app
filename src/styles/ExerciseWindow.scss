@@ -37,6 +37,11 @@
 			}
 		}
 	}
+	&__name {
+		text-transform: uppercase;
+		font-weight: bold;
+		letter-spacing: 4px;
+	}
 	&__form {
 		form {
 			position: relative;
@@ -48,5 +53,25 @@
 				max-width: 20%;
 			}
 		}
+		button {
+			padding: 0.4em 0.8em;
+			border: 1px solid $Black;
+			border-radius: 20px;
+			background-color: $White;
+			color: $Black;
+			text-transform: uppercase;
+		}
+	}
+	.finish-button {
+		border: transparent;
+
+		background-color: $Gold;
+		color: $Black;
+	}
+}
+.exercise-data {
+	&--hide {
+		height: 0;
+		overflow: hidden;
 	}
 }

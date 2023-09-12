@@ -1,5 +1,5 @@
 // React
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 // Lib
 
@@ -27,13 +27,16 @@ const exercises = [
 ]
 
 const AddExerciseForm = () => {
-	const { selectedExercises, setSelectedExercises } = useContext(StartTrainingContext)
+	const { selectedExercises, setSelectedExercises, disableButton, setDisableButton } = useContext(StartTrainingContext)
+
 	const [selectOption, setSelectOption] = useState({
-		group: 'Chest',
-		exercise: 'Bench Press',
+		group: '',
+		exercise: '',
 	})
 	const [hideFrom, setHideForm] = useState(false)
+
 	const formHideStyle = hideFrom ? { height: 0, overflow: 'hidden' } : { height: 'unset', overflow: 'hidden' }
+
 	const handleSelectChange = e => {
 		const { value, name } = e.target
 		setSelectOption(prevData => ({
@@ -43,9 +46,15 @@ const AddExerciseForm = () => {
 	}
 	const handleStartExercise = e => {
 		e.preventDefault()
-		setHideForm(prevState => !prevState)
-		const newSelectedExercises = selectedExercises.concat(selectOption.exercise)
-		setSelectedExercises(newSelectedExercises)
+		const { group, exercise } = selectOption
+		if (group === '' || group === 'Select group' || exercise === '' || exercise === 'Select exercise') {
+			return
+		} else {
+			setHideForm(prevState => !prevState)
+			const newSelectedExercises = selectedExercises.concat(selectOption.exercise)
+			setSelectedExercises(newSelectedExercises)
+			setDisableButton(true)
+		}
 	}
 	const handleHideForm = () => {
 		setHideForm(prevState => !prevState)
@@ -57,6 +66,7 @@ const AddExerciseForm = () => {
 			<form style={formHideStyle} className='add-exercise-form'>
 				<label htmlFor='groups'>Select muscle group</label>
 				<select name='group' id='groups' onChange={handleSelectChange}>
+					<option>Select group</option>
 					{groups.map((group, index) => {
 						return (
 							<option key={index} value={group}>
@@ -67,6 +77,7 @@ const AddExerciseForm = () => {
 				</select>
 				<label htmlFor='exercises'>Select exercise</label>
 				<select name='exercise' id='exercises' onChange={handleSelectChange}>
+					<option>Select exercise</option>
 					{selectedGroup.map((exercise, index) => {
 						return (
 							<option key={index} value={exercise}>
@@ -75,9 +86,10 @@ const AddExerciseForm = () => {
 						)
 					})}
 				</select>
-				<button className='add-training-button' onClick={handleStartExercise}>
+				<button className='add-training-button' onClick={handleStartExercise} disabled={disableButton}>
 					Start exercise
 				</button>
+				{disableButton && <span>You must finish your last exercise session.</span>}
 			</form>
 		</div>
 	)
