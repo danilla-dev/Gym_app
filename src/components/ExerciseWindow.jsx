@@ -14,16 +14,27 @@ import { StartTrainingContext } from '../contexts/StartTrainingContext'
 import '../styles/ExerciseWindow.scss'
 const ExerciseSeries = ({ weight, reps, index }) => {
 	return (
-		<div className='exercise-window__series-1 series'>
+		<div key={index} className='exercise-window__series-1 series'>
 			<p className='series-count'>{index + 1}</p>
 			<p className='weight'>{weight}kg</p>
 			<p className='reps'>{reps}</p>
 		</div>
 	)
 }
+const AllSeries = ({ exerciseIndex, series }) => {
+	return series.map((el, index) => {
+		if (el.exerciseIndex === exerciseIndex) {
+			const { weight, reps } = el
+			return <ExerciseSeries key={index} weight={weight} reps={reps} index={index} />
+		}
+		return null
+	})
+}
+
 const ExerciseWindow = () => {
 	const { selectedExercises } = useContext(StartTrainingContext)
 	const [series, setSeries] = useState([])
+	console.log(series)
 	const [formData, setFormData] = useState({
 		weight: 0,
 		reps: 0,
@@ -40,10 +51,10 @@ const ExerciseWindow = () => {
 		}))
 	}
 
-	const handleAddSeries = e => {
-		e.preventDefault()
+	const handleAddSeries = (event, index) => {
+		event.preventDefault()
 		const { weight, reps } = formData
-		const newSeries = series.concat({ weight: weight, reps: reps })
+		const newSeries = series.concat({ exerciseIndex: index, weight: weight, reps: reps })
 		setSeries(newSeries)
 	}
 	const handleToggleWindow = index => {
@@ -54,14 +65,10 @@ const ExerciseWindow = () => {
 		})
 	}
 
-	const allSeries = series.map((el, index) => {
-		const { weight, reps } = el
-		return <ExerciseSeries weight={weight} reps={reps} index={index} />
-	})
-
 	const windowHideStyles = { overflow: 'hidden', height: hideWindow ? '0' : 'unset' }
 
 	const exercisesWindows = selectedExercises.map((exercise, index) => {
+		console.log(index)
 		return (
 			<div className='exercise-window'>
 				<p onClick={() => handleToggleWindow(index)} className='exercise-window__name'>
@@ -74,10 +81,10 @@ const ExerciseWindow = () => {
 							<p className='weight'> Weight </p>
 							<p className='reps'>Reps</p>
 						</div>
-						{allSeries}
+						<AllSeries exerciseIndex={index} series={series} />
 					</div>
 					<div className='exercise-window__form'>
-						<form onSubmit={handleAddSeries}>
+						<form onSubmit={e => handleAddSeries(e, index)}>
 							<label htmlFor='weight'>Weight: </label>
 							<input type='text' name='weight' id='weight' onChange={handleOnChange} />
 							<label htmlFor='reps'>Reps: </label>

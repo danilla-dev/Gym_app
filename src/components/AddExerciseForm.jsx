@@ -57,14 +57,22 @@ const AddExerciseForm = () => {
 			<form style={formHideStyle} className='add-exercise-form'>
 				<label htmlFor='groups'>Select muscle group</label>
 				<select name='group' id='groups' onChange={handleSelectChange}>
-					{groups.map(group => {
-						return <option value={group}>{group}</option>
+					{groups.map((group, index) => {
+						return (
+							<option key={index} value={group}>
+								{group}
+							</option>
+						)
 					})}
 				</select>
 				<label htmlFor='exercises'>Select exercise</label>
 				<select name='exercise' id='exercises' onChange={handleSelectChange}>
-					{selectedGroup.map(exercise => {
-						return <option value={exercise}>{exercise}</option>
+					{selectedGroup.map((exercise, index) => {
+						return (
+							<option key={index} value={exercise}>
+								{exercise}
+							</option>
+						)
 					})}
 				</select>
 				<button className='add-training-button' onClick={handleStartExercise}>
