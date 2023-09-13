@@ -9,9 +9,12 @@ import React, { useState, useContext, useEffect } from 'react'
 
 //Contexts
 import { StartTrainingContext } from '../contexts/StartTrainingContext'
+import { UserContext } from '../contexts/UserContext'
 
 // Styles
 import '../styles/AddExerciseForm.scss'
+// DB
+import { saveTrainingSession } from '../firebase/handleDatabase'
 
 const groups = ['Chest', 'Back', 'Shoulders', 'Abs', 'Biceps', 'Legs', 'Triceps']
 const exercises = [
@@ -27,7 +30,9 @@ const exercises = [
 ]
 
 const AddExerciseForm = () => {
-	const { selectedExercises, setSelectedExercises, disableButton, setDisableButton } = useContext(StartTrainingContext)
+	const { selectedExercises, setSelectedExercises, disableButton, setDisableButton, trainingData, setTrainingData } =
+		useContext(StartTrainingContext)
+	const { userID } = useContext(UserContext)
 
 	const [selectOption, setSelectOption] = useState({
 		group: '',
@@ -54,6 +59,13 @@ const AddExerciseForm = () => {
 			const newSelectedExercises = selectedExercises.concat(selectOption.exercise)
 			setSelectedExercises(newSelectedExercises)
 			setDisableButton(true)
+			const exerciseIndex = trainingData.exercises.length
+			trainingData.exercises.push({
+				name: exercise,
+				index: exerciseIndex + 1,
+				series: [],
+			})
+			console.log(trainingData)
 		}
 	}
 	const handleHideForm = () => {
@@ -88,6 +100,14 @@ const AddExerciseForm = () => {
 				</select>
 				<button className='add-training-button' onClick={handleStartExercise} disabled={disableButton}>
 					Start exercise
+				</button>
+				<button
+					onClick={e => {
+						e.preventDefault()
+						saveTrainingSession(userID, trainingData)
+					}}
+				>
+					Save exercise
 				</button>
 				{disableButton && <span>You must finish your last exercise session.</span>}
 			</form>

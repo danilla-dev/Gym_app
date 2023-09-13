@@ -24,7 +24,7 @@ const HomePageTraining = () => {
 	const trainings = trainingsDB.map((training, index) => {
 		const { name, day, lastTraining } = training
 		return (
-			<Link to={`/user/trainings/${name}`}>
+			<Link key={index} to={`/user/trainings/${name}`}>
 				<div key={index} className='home-page-training'>
 					<p className='home-page-training__name'>{name}</p>
 					<p className='home-page-training__day'>{day}</p>

@@ -12,6 +12,9 @@ import { StartTrainingContext } from '../contexts/StartTrainingContext'
 
 // Styles
 import '../styles/ExerciseWindow.scss'
+
+// database
+
 const ExerciseSeries = ({ weight, reps, index }) => {
 	return (
 		<div key={index} className='exercise-window__series-1 series'>
@@ -35,7 +38,7 @@ const AllSeries = ({ exerciseIndex, series }) => {
 }
 
 const ExerciseWindow = () => {
-	const { selectedExercises, disableButton, setDisableButton } = useContext(StartTrainingContext)
+	const { selectedExercises, setDisableButton, trainingData, setTrainingData } = useContext(StartTrainingContext)
 	const [series, setSeries] = useState([])
 	const [finishSession, setFinishSession] = useState([])
 
@@ -57,8 +60,18 @@ const ExerciseWindow = () => {
 	const handleAddSeries = (event, index) => {
 		event.preventDefault()
 		const { weight, reps } = formData
-		const newSeries = series.concat({ exerciseIndex: index, weight: weight, reps: reps })
+		const newSeries = series.concat({
+			exerciseIndex: index,
+			weight: weight,
+			reps: reps,
+		})
 		setSeries(newSeries)
+		trainingData.exercises.forEach(exercise => {
+			if (exercise.index === index + 1) {
+				exercise.series.push({ weight, reps })
+			}
+		})
+		setTrainingData(trainingData)
 	}
 	const handleToggleWindow = e => {
 		const window = e.target.nextElementSibling || e.target.closest('.exercise-data')
@@ -66,11 +79,11 @@ const ExerciseWindow = () => {
 	}
 	const handleFinishExercise = indexOfSession => {
 		setDisableButton(false)
-		const finishedSessions = finishSession.concat({ sessionIndex: indexOfSession })
+		const finishedSessions = finishSession.concat({
+			sessionIndex: indexOfSession,
+		})
 		setFinishSession(finishedSessions)
 	}
-
-	const windowHideStyles = { overflow: 'hidden', height: openWindows ? 'unset' : '0' }
 
 	const exercisesWindows = selectedExercises.map((exercise, index) => {
 		return (

@@ -1,5 +1,5 @@
 // React
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 // Lib
 import { Link, useHistory } from 'react-router-dom'
@@ -9,9 +9,12 @@ import { Link, useHistory } from 'react-router-dom'
 // Layouts
 
 //Contexts
+import { UserContext } from '../contexts/UserContext'
 
 // Styles
 import '../styles/TrainingsPage.scss'
+// DB
+import { getTrainingData } from '../firebase/handleDatabase'
 
 const trainingDB = [
 	{
@@ -104,6 +107,11 @@ const Session = ({ session, index, showSessionIndex, setShowSessionIndex }) => {
 
 const Sessions = () => {
 	const [showSessionIndex, setShowSessionIndex] = useState(null)
+	const { userID } = useContext(UserContext)
+	console.log(userID)
+	const sessionss = getTrainingData(userID)
+	console.log('user sessions')
+	console.log(sessionss)
 	const sessions = trainingDB[0].sessions.map((session, index) => (
 		<Session
 			key={index}
