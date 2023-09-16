@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react'
 
 // Lib
 import { useHistory } from 'react-router-dom'
+import { get, child } from 'firebase/database'
 
 // Components
 
@@ -16,19 +17,9 @@ import { UserContext } from '../contexts/UserContext'
 import '../styles/AddExerciseForm.scss'
 // DB
 import { saveTrainingSession } from '../firebase/handleDatabase'
+import { dbRef } from '../firebase/firebaseConfig'
 
 const groups = ['Chest', 'Back', 'Shoulders', 'Abs', 'Biceps', 'Legs', 'Triceps']
-const exercises = [
-	{
-		Chest: ['Bench Press', 'Incline bench press'],
-		Back: ['Deadlift', 'Pull-Up'],
-		Shoulders: ['Barbell overhead press', 'Military press'],
-		Abs: ['Plank', 'Mountain climber'],
-		Biceps: ['Barbell Curls', 'Incline Dumbbell Curls'],
-		Legs: ['Back Squat', 'Leg Press'],
-		Triceps: ['Bench Dips', 'Push Ups'],
-	},
-]
 
 const AddExerciseForm = () => {
 	const { selectedExercises, setSelectedExercises, disableButton, setDisableButton, trainingData, setTrainingData } =
@@ -39,6 +30,22 @@ const AddExerciseForm = () => {
 		exercise: '',
 	})
 	const [hideFrom, setHideForm] = useState(false)
+	const [userExercises, setUserExercises] = useState()
+
+	useEffect(() => {
+		get(child(dbRef, `exercises/${userID}`))
+			.then(snapshot => {
+				if (snapshot.exists()) {
+					console.log([snapshot.val()])
+					setUserExercises([snapshot.val()])
+				} else {
+					console.log('No data available')
+				}
+			})
+			.catch(error => {
+				console.error(error)
+			})
+	}, [])
 
 	const formHideStyle = hideFrom ? { height: 0, overflow: 'hidden' } : { height: 'unset', overflow: 'hidden' }
 
@@ -75,7 +82,8 @@ const AddExerciseForm = () => {
 	const handleHideForm = () => {
 		setHideForm(prevState => !prevState)
 	}
-	const selectedGroup = exercises[0][selectOption.group] || []
+
+	const selectedGroup = (userExercises && userExercises[0][selectOption.group]) || []
 	return (
 		<div className='add-exercise-form-container'>
 			{hideFrom ? <p onClick={hideFrom ? handleHideForm : null}>Select exercise</p> : null}
@@ -115,6 +123,7 @@ const AddExerciseForm = () => {
 							date: trainingData.date,
 							exercises: [],
 						})
+						history.push('/')
 					}}
 				>
 					Save exercise

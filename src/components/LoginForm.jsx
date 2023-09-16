@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase/firebaseConfig'
+import { useHistory } from 'react-router-dom'
 // Components
 // layouts
 // Contexts
@@ -13,6 +14,7 @@ const LoginForm = () => {
 		email: '',
 		password: '',
 	})
+	const history = useHistory()
 
 	const handleSubmit = e => {
 		e.preventDefault()
@@ -20,7 +22,7 @@ const LoginForm = () => {
 		signInWithEmailAndPassword(auth, email, password)
 			.then(userCredential => {
 				const user = userCredential.user
-				console.log(user)
+				history.push('/')
 			})
 			.catch(error => {
 				const errorCode = error.code

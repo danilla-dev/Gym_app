@@ -9,12 +9,13 @@
 		color: $Gold;
 		font-size: 3rem;
 	}
-  a{
-    text-decoration: none;
-  }
+	a {
+		text-decoration: none;
+	}
 	&__trainings,
 	&__max {
 		padding: 2em 1em;
+		padding-top: 1em;
 		button {
 			width: 100%;
 			padding: 1em 0.5em;
@@ -30,7 +31,7 @@
 		}
 	}
 	.title {
-		margin: 0.75em 0;
+		margin: 0.25em 0;
 		font-size: 2rem;
 		color: $Silver;
 	}

@@ -75,10 +75,6 @@ const trainingDB = [
 	},
 ]
 const Exercise = ({ exercise }) => {
-	console.log('exercise')
-	console.log(exercise)
-	console.log('series')
-	console.log(exercise.series)
 	return (
 		exercise.series && (
 			<div className='exercise'>
@@ -111,7 +107,7 @@ const Session = ({ session, index, showSessionIndex, setShowSessionIndex }) => {
 			}}
 		>
 			<p className='date'>{sessionDate}</p>
-			<div className='exercise-container' style={{ height: isSessionActive ? '550px' : 0, overflow: 'hidden' }}>
+			<div className='exercise-container' style={{ height: isSessionActive ? 'unset' : 0, overflow: 'hidden' }}>
 				{exercises}
 			</div>
 		</div>

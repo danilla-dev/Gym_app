@@ -22,7 +22,6 @@ const AsideMenu = ({ style }) => {
 	const { userNick, logoutUser } = useContext(UserContext)
 	return (
 		<div style={style} className='aside-menu'>
-			{/* <p className='aside-menu__user'>Hello {userNick} </p> */}
 			<h1 className='nav__title'>
 				GymApp <GiStrong />
 			</h1>
@@ -32,7 +31,7 @@ const AsideMenu = ({ style }) => {
 					<p>Your trainings</p>
 				</div>
 			</Link>
-			<Link to='/exercises'>
+			<Link to='/user/exercises'>
 				<div className='aside-menu__exercises aside-menu__option'>
 					<FaDumbbell />
 					<p>Exercises</p>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 // Lib
 import { FaBars } from 'react-icons/fa'
 import { FaXmark } from 'react-icons/fa6'
@@ -8,10 +8,12 @@ import { Link } from 'react-router-dom'
 import AsideMenu from './AsideMenu'
 // layouts
 // Contexts
+import { UserContext } from '../contexts/UserContext'
 // Styles
 import '../styles/Navigation.scss'
 const Navigation = () => {
 	const [showMenu, setShowMenu] = useState(false)
+	const { userID } = useContext(UserContext)
 	const handleShowMenu = () => {
 		setShowMenu(prevData => !prevData)
 	}
@@ -22,10 +24,14 @@ const Navigation = () => {
 					GymApp <GiStrong />
 				</h1>
 			</Link>
-			<button onClick={handleShowMenu} className='nav__button'>
-				{showMenu ? <FaXmark /> : <FaBars />}
-			</button>
-			<AsideMenu style={showMenu ? { left: 0 } : { left: '-100%' }} />
+			{userID && (
+				<>
+					<button onClick={handleShowMenu} className='nav__button'>
+						{showMenu ? <FaXmark /> : <FaBars />}
+					</button>
+					<AsideMenu style={showMenu ? { left: 0 } : { left: '-100%' }} />
+				</>
+			)}
 		</nav>
 	)
 }

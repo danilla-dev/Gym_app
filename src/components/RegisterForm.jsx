@@ -12,6 +12,8 @@ import { database } from '../firebase/firebaseConfig'
 import { UserContext } from '../contexts/UserContext'
 // Styles
 import '../styles/RegisterForm.scss'
+// DB
+import { createExercisesDataForUser } from '../firebase/handleDatabase'
 const RegisterForm = () => {
 	const registerForm = useRef()
 	const history = useHistory()
@@ -21,7 +23,7 @@ const RegisterForm = () => {
 		password: '',
 		passwordRepeat: '',
 	})
-	const { setUserNick } = useContext(UserContext)
+	const { userID } = useContext(UserContext)
 	const emailRegExp = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/
 
 	const errorMessages = {
@@ -52,37 +54,6 @@ const RegisterForm = () => {
 		})
 	}
 
-	const createHomePageTrainingStructure = id => {
-		set(ref(database, 'trainingsHomePage/' + id), {
-			homePageTrainings: [{ name: '', day: '', lastTraining: '' }],
-		})
-	}
-	const createTrainingStructure = id => {
-		set(ref(database, 'trainings/' + id), {
-			trainings: [
-				{
-					day: '',
-					name: '',
-					sessions: [
-						{
-							exercises: [
-								{
-									name: '',
-									series: [
-										{ weight: 0, reps: 0 },
-										{ weight: 0, reps: 0 },
-										{ weight: 0, reps: 0 },
-										{ weight: 0, reps: 0 },
-									],
-								},
-							],
-						},
-					],
-				},
-			],
-		})
-	}
-
 	const handleSubmit = e => {
 		e.preventDefault()
 		const { email, password, username } = formData
@@ -91,6 +62,7 @@ const RegisterForm = () => {
 				const { uid } = userCredential.user
 				setUsername(uid, username)
 				history.push('/')
+				createExercisesDataForUser(uid)
 			})
 			.catch(error => {})
 	}
