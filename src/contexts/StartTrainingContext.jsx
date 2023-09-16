@@ -28,10 +28,8 @@ const StartTrainingProvider = ({ children }) => {
 	const [disableButton, setDisableButton] = useState(false)
 	const [trainingData, setTrainingData] = useState({
 		date: currentDate,
-		name: trainingName,
 		exercises: [],
 	})
-
 	const contextValue = {
 		selectedExercises,
 		setSelectedExercises,

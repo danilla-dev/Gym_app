@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { FaBars } from 'react-icons/fa'
 import { FaXmark } from 'react-icons/fa6'
 import { GiStrong } from 'react-icons/gi'
+import { Link } from 'react-router-dom'
 // Components
 import AsideMenu from './AsideMenu'
 // layouts
@@ -16,9 +17,11 @@ const Navigation = () => {
 	}
 	return (
 		<nav className='nav'>
-			<h1 className='nav__title'>
-				GymApp <GiStrong />
-			</h1>
+			<Link to='/'>
+				<h1 className='nav__title'>
+					GymApp <GiStrong />
+				</h1>
+			</Link>
 			<button onClick={handleShowMenu} className='nav__button'>
 				{showMenu ? <FaXmark /> : <FaBars />}
 			</button>

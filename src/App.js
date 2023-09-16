@@ -23,20 +23,20 @@ const App = () => {
 				<>
 					<Navigation />
 					<Switch>
-						<Route exact path='/'>
-							<HomePage />
-						</Route>
-						<Route path='/auth'>
-							<AuthPage />
-						</Route>
-						<Route path='/user/trainings/*'>
-							<TrainingsPage />
-						</Route>
-						<Route path='/user/start-training/*'>
-							<StartTrainingProvider>
+						<StartTrainingProvider>
+							<Route exact path='/'>
+								<HomePage />
+							</Route>
+							<Route path='/auth'>
+								<AuthPage />
+							</Route>
+							<Route path='/user/trainings/*'>
+								<TrainingsPage />
+							</Route>
+							<Route path='/user/start-training/*'>
 								<StartTrainingPage />
-							</StartTrainingProvider>
-						</Route>
+							</Route>
+						</StartTrainingProvider>
 					</Switch>
 				</>
 			)}

@@ -2,6 +2,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 
 // Lib
+import { useHistory } from 'react-router-dom'
 
 // Components
 
@@ -33,7 +34,6 @@ const AddExerciseForm = () => {
 	const { selectedExercises, setSelectedExercises, disableButton, setDisableButton, trainingData, setTrainingData } =
 		useContext(StartTrainingContext)
 	const { userID } = useContext(UserContext)
-
 	const [selectOption, setSelectOption] = useState({
 		group: '',
 		exercise: '',
@@ -41,6 +41,11 @@ const AddExerciseForm = () => {
 	const [hideFrom, setHideForm] = useState(false)
 
 	const formHideStyle = hideFrom ? { height: 0, overflow: 'hidden' } : { height: 'unset', overflow: 'hidden' }
+
+	const history = useHistory()
+	const path = history.location.pathname
+	const parts = path.split('/')
+	const trainingName = parts[parts.length - 1]
 
 	const handleSelectChange = e => {
 		const { value, name } = e.target
@@ -65,7 +70,6 @@ const AddExerciseForm = () => {
 				index: exerciseIndex + 1,
 				series: [],
 			})
-			console.log(trainingData)
 		}
 	}
 	const handleHideForm = () => {
@@ -104,7 +108,13 @@ const AddExerciseForm = () => {
 				<button
 					onClick={e => {
 						e.preventDefault()
-						saveTrainingSession(userID, trainingData)
+						console.log(trainingData)
+						saveTrainingSession(userID, trainingData, trainingName)
+						setSelectedExercises([])
+						setTrainingData({
+							date: trainingData.date,
+							exercises: [],
+						})
 					}}
 				>
 					Save exercise

@@ -1,8 +1,10 @@
 // React
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 // Lib
 import { Link, useHistory } from 'react-router-dom'
+import { dbRef } from '../firebase/firebaseConfig'
+import { child, get } from 'firebase/database'
 
 // Components
 
@@ -10,6 +12,7 @@ import { Link, useHistory } from 'react-router-dom'
 
 //Contexts
 import { UserContext } from '../contexts/UserContext'
+import { StartTrainingContext } from '../contexts/StartTrainingContext'
 
 // Styles
 import '../styles/TrainingsPage.scss'
@@ -72,22 +75,34 @@ const trainingDB = [
 	},
 ]
 const Exercise = ({ exercise }) => {
+	console.log('exercise')
+	console.log(exercise)
+	console.log('series')
+	console.log(exercise.series)
 	return (
-		<div className='exercise'>
-			<p>{exercise.name}</p>
-			{exercise.series.map((series, seriesIndex) => (
-				<div key={seriesIndex} className='series'>
-					<p>{series.weight} kg</p>
-					<p>Reps: {series.reps}</p>
-				</div>
-			))}
-		</div>
+		exercise.series && (
+			<div className='exercise'>
+				<p>{exercise.name}</p>
+				{exercise.series.map((series, seriesIndex) => (
+					<div key={seriesIndex} className='series'>
+						<p>{series.weight} kg</p>
+						<p>Reps: {series.reps}</p>
+					</div>
+				))}
+			</div>
+		)
 	)
 }
 
 const Session = ({ session, index, showSessionIndex, setShowSessionIndex }) => {
 	const isSessionActive = showSessionIndex === index
+	const sessionDate = Object.entries(session)[0][0]
+	const sessions = session[sessionDate]
 
+	const exercises =
+		sessions.length !== 0
+			? sessions.map((exercise, exerciseIndex) => <Exercise key={exerciseIndex} exercise={exercise} />)
+			: null
 	return (
 		<div
 			className={`session-${index + 1} trainings-page__session ${isSessionActive ? 'active' : ''}`}
@@ -95,11 +110,9 @@ const Session = ({ session, index, showSessionIndex, setShowSessionIndex }) => {
 				setShowSessionIndex(isSessionActive ? null : index)
 			}}
 		>
-			<p className='date'>{session.date}</p>
+			<p className='date'>{sessionDate}</p>
 			<div className='exercise-container' style={{ height: isSessionActive ? '550px' : 0, overflow: 'hidden' }}>
-				{session.exercises.map((exercise, exerciseIndex) => (
-					<Exercise key={exerciseIndex} exercise={exercise} />
-				))}
+				{exercises}
 			</div>
 		</div>
 	)
@@ -107,23 +120,44 @@ const Session = ({ session, index, showSessionIndex, setShowSessionIndex }) => {
 
 const Sessions = () => {
 	const [showSessionIndex, setShowSessionIndex] = useState(null)
+	const [allSessions, setAllSessions] = useState(null)
 	const { userID } = useContext(UserContext)
-	console.log(userID)
-	const sessionss = getTrainingData(userID)
-	console.log('user sessions')
-	console.log(sessionss)
-	const sessions = trainingDB[0].sessions.map((session, index) => (
-		<Session
-			key={index}
-			session={session}
-			index={index}
-			showSessionIndex={showSessionIndex}
-			setShowSessionIndex={setShowSessionIndex}
-		/>
-	))
+	const { trainingData } = useContext(StartTrainingContext)
+
+	const history = useHistory()
+	const path = history.location.pathname
+	const parts = path.split('/')
+	const trainingName = parts[parts.length - 1]
+
+	useEffect(() => {
+		get(child(dbRef, `trainings/${userID}/${trainingName}`))
+			.then(snapshot => {
+				if (snapshot.exists()) {
+					setAllSessions([snapshot.val()])
+				} else {
+					console.log('No data available')
+				}
+			})
+			.catch(error => {
+				console.error(error)
+			})
+	}, [userID, trainingName])
+
+	const sessions =
+		allSessions &&
+		allSessions.map((session, index) => (
+			<Session
+				key={index}
+				session={session}
+				index={index}
+				showSessionIndex={showSessionIndex}
+				setShowSessionIndex={setShowSessionIndex}
+			/>
+		))
 
 	return <>{sessions}</>
 }
+
 const StartTrainingButton = ({ name }) => {
 	return (
 		<Link to={`/user/start-training/${name}`}>
